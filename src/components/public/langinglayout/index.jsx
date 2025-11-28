@@ -61,6 +61,7 @@ export const LandingLayout = (WrappedComponent) => (url) => {
             window.location.href.includes("6925829fbb1a5babcf559a53.eventhex.ai") ||
             window.location.href.includes("master.d171yad5a2f5g3.amplifyapp.com") ||
             window.location.href.includes("https://master.d171yad5a2f5g3.amplifyapp.com/") ||
+            window.location.href.includes("netlify-exhibitor.netlify.app") ||
             projectSettings.adminDomains?.includes(hostname);
           const response = isAdminDomain
             ? {

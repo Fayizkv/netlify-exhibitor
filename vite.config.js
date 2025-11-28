@@ -23,7 +23,7 @@ export default defineConfig({
   preview: {
     port: process.env.PORT || 3000 || 3004,
     host: "0.0.0.0",
-    allowedHosts: ["event-hex-saad-vite-mzmxq.ondigitalocean.app", "ugaryzt67c.ap-south-1.awsapprunner.com", "worldbiohacksummit.eventhex.ai","6925829fbb1a5babcf559a53.eventhex.ai", "master.d171yad5a2f5g3.amplifyapp.com"],
+    allowedHosts: ["event-hex-saad-vite-mzmxq.ondigitalocean.app", "ugaryzt67c.ap-south-1.awsapprunner.com", "worldbiohacksummit.eventhex.ai","6925829fbb1a5babcf559a53.eventhex.ai", "master.d171yad5a2f5g3.amplifyapp.com", "netlify-exhibitor.netlify.app"],
   },
   optimizeDeps: {
     exclude: ["js-big-decimal"],

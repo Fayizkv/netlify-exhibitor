@@ -8,7 +8,7 @@ export const projectSettings = {
     franchiseAdmin: "6493e7bf0fba44683fd8f51c",
     ticketAdmin: "664c299ed0fe5be38fbe1770",
   },
-  adminDomains: [ "event-hex-saad-vite-mzmxq.ondigitalocean.app", "app.eventhex.ai", "admin.eventhex.co", "192.168.29.97", "eventhex1.datahex.co", "exhibitor-cms-uf22t.ondigitalocean.app", "https://ugaryzt67c.ap-south-1.awsapprunner.com"],
+  adminDomains: [ "event-hex-saad-vite-mzmxq.ondigitalocean.app", "app.eventhex.ai", "admin.eventhex.co", "192.168.29.97", "eventhex1.datahex.co", "exhibitor-cms-uf22t.ondigitalocean.app", "https://ugaryzt67c.ap-south-1.awsapprunner.com", "netlify-exhibitor.netlify.app", "master.d171yad5a2f5g3.amplifyapp.com", "worldbiohacksummit.eventhex.ai","6925829fbb1a5babcf559a53.eventhex.ai"],
   formInputView: "mixed", // classic, modern, mixed
   theme: {
     theme: "#375DFB",
