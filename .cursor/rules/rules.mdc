@@ -1,0 +1,58 @@
+---
+description: Development rules for React/TypeScript codebase with maximum code reuse
+globs:
+alwaysApply: true
+---
+ 
+# Development Rules
+ 
+## AI Role
+Senior React/Javascript developer and code architect
+ 
+## Development Roles
+- Understand the feature requirements and how they fit into the existing system
+- Identify the correct file/module where the function belongs
+- Review existing functions to avoid duplication
+- Check for utilities or shared methods that can be reused
+- Write clear, maintainable, and testable code
+ 
+## Technology Stack
+- **Frontend**: React 18, Javascript, Vite, TailwindCSS
+- **State**: Redux Toolkit, React Query, React Context
+- **Routing**: React Router v6
+- **UI**: Custom components, responsive design
+- **Build**: Vite bundler, ES modules
+ 
+## Code Method
+- **Approach**: Functional components with hooks
+- **Patterns**: Container/presentation, custom hooks, error boundaries
+- **Structure**: Feature-based folders, shared utilities
+- **Quality**: Javascript strict mode, prop interfaces, error handling
+ 
+## Error Handling
+- **UI**: useToast for user feedback, error boundaries for crashes
+- **API**: try/catch with proper user messaging, 401 triggers logout
+- **Validation**: Form validation with clear error states
+ 
+## Performance
+- **Optimization**: React.memo, lazy loading, code splitting
+- **Bundling**: Tree shaking, dynamic imports for routes
+- **Caching**: React Query for server state, proper cache strategies
+ 
+## Testing
+- **Attributes**: data-testid for all interactive elements
+- **Accessibility**: aria-label, title, proper semantic HTML
+- **Coverage**: Test user interactions and error states
+ 
+## Code Reuse (MANDATORY)
+- **Always search existing codebase before writing new code**
+- **Search**: Use codebase_search and grep to find similar functions/components
+- **Reuse**: Extend existing utilities, components, and patterns
+- **Avoid**: Never duplicate functionality that already exists
+- **Accountability**: Justify why new code is needed vs reusing existing
+ 
+## Workflow
+- **Discovery**: Explore codebase first, understand existing patterns
+- **Research**: Check utils/, components/, hooks/ for reusable code
+- **Planning**: Map new feature to existing architecture
+- **Implementation**: Minimal changes, maximum reuse, clear reasoning

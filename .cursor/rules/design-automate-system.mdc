@@ -1,0 +1,1671 @@
+---
+alwaysApply: true
+---
+
+# EventHex SaaS CMS - Complete Cursor Rules
+
+## 🎨 Design System & Color Configuration
+
+### ✅ CORRECT - Use Tailwind Theme Colors
+```jsx
+// Primary Colors
+className="bg-primary-base text-primary-lightest"
+className="bg-primary-light text-primary-dark"
+
+// Background Colors  
+className="bg-bg-white"
+className="bg-bg-weak"
+className="bg-bg-soft"
+
+// Text Colors
+className="text-text-main"
+className="text-text-sub"
+className="text-text-soft"
+className="text-text-disabled"
+
+// Stroke Colors
+className="border border-stroke-soft"
+className="border border-stroke-sub"
+
+// State Colors
+className="bg-state-success text-white"
+className="bg-state-error text-white"
+className="bg-state-warning text-white"
+```
+
+### ❌ WRONG - Don't Use Hardcoded Colors
+```jsx
+// ❌ Never do this
+style={{ backgroundColor: "#375DFB" }}
+className="bg-blue-500"
+className="text-gray-600"
+```
+
+## 🧩 Component Library - Maximum Reusability
+
+### 1. Layout Components - ALWAYS USE THESE
+```jsx
+import { PageHeader, SubPageHeader } from "../../../core/input/heading";
+import { RowContainer } from "../../../styles/containers/styles";
+import { ButtonPanel } from "../../../core/list/styles";
+
+// Usage Pattern
+<RowContainer className="data-layout">
+  <PageHeader title="Page Title" description="Description" />
+  <ButtonPanel className="custom">
+    {/* Action buttons */}
+  </ButtonPanel>
+  {/* Content */}
+</RowContainer>
+```
+
+### 2. Form Components - ALWAYS REUSE
+```jsx
+import { Button } from "../../../core/elements";
+import { Input, Select, Textarea } from "../../../core/input";
+import { Checkbox, Radio } from "../../../core/elements";
+import { CustomLabel, ErrorLabel, Footnote } from "../../../core/input";
+import { AutoForm } from "../../../core/autoform/AutoForm";
+
+// Usage Pattern
+<div className="space-y-4">
+  <div>
+    <CustomLabel label="Field Label" required={true} />
+    <Input 
+      type="text" 
+      placeholder="Enter value"
+      error={errors.fieldName}
+    />
+    <ErrorLabel error={errors.fieldName} />
+  </div>
+</div>
+```
+
+### 3. Interactive Components - ALWAYS REUSE
+```jsx
+import { Search } from "../../../core/search";
+import { Filter } from "../../../core/list/styles";
+import { Toggle } from "../../../core/toggle";
+import { Modal, PopupView } from "../../../core/popupview";
+import { Toast } from "../../../core/toast";
+
+// Usage Pattern
+<div className="flex items-center gap-3">
+  <Search 
+    title="Search" 
+    placeholder="Search items..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+  />
+  <Filter onClick={toggleFilter}>
+    <GetIcon icon="filter" />
+    <span>Filter</span>
+  </Filter>
+</div>
+```
+
+### 4. Feedback Components - ALWAYS REUSE
+```jsx
+import { Loader, Shimmer } from "../../../core/loader";
+import { Message } from "../../../core/message";
+import { NoDataFound } from "../../../core/list/nodata";
+import { useToast } from "../../../core/toast";
+
+// Usage Pattern
+{isLoading ? (
+  <Shimmer count={5} />
+) : items.length === 0 ? (
+  <NoDataFound 
+    shortName="Items" 
+    icon="folder"
+    addPrivilege={true}
+    addLabel="Add Item"
+    isCreatingHandler={handleAdd}
+  />
+) : (
+  // Content
+)}
+```
+
+## 📝 Form Field Patterns - Reusable Techniques
+
+### 1. TEXT FIELD PATTERN
+```jsx
+{
+  type: "text",
+  placeholder: "Enter field name",
+  name: "fieldName",
+  label: "Field Label",
+  required: true,
+  view: true,
+  add: true,
+  update: true,
+  icon: "icon-name",
+  validation: "required|min:3",
+  default: "",
+  tag: false,
+  customClass: "full" // or "half", "third", "quarter"
+}
+```
+
+### 2. SELECT FIELD PATTERN
+```jsx
+{
+  type: "select",
+  apiType: "API",
+  selectApi: "api/endpoint/select",
+  placeholder: "Select option",
+  name: "category",
+  showItem: "value", // or "label", "name"
+  label: "Category",
+  required: true,
+  view: true,
+  add: true,
+  update: true,
+  filter: true,
+  icon: "icon-name",
+  addNew: {
+    label: "Add new category",
+    attributes: [
+      {
+        type: "text",
+        name: "categoryName",
+        label: "Category Name",
+        required: true,
+        view: true,
+        add: true,
+        update: true
+      }
+    ],
+    api: "api/categories",
+    submitButtonText: "Create"
+  }
+}
+```
+
+### 3. MULTI-SELECT FIELD PATTERN
+```jsx
+{
+  type: "multiSelect",
+  apiType: "API",
+  selectApi: "api/items/select",
+  placeholder: "Select items",
+  name: "items",
+  updateOn: "parentField", // Update when parent field changes
+  label: "Items",
+  required: false,
+  view: true,
+  add: true,
+  update: true,
+  icon: "icon-name",
+  addNew: {
+    label: "Add new item",
+    attributes: [
+      {
+        type: "text",
+        name: "itemName",
+        label: "Item Name",
+        required: true
+      }
+    ],
+    api: "api/items",
+    submitButtonText: "Create"
+  }
+}
+```
+
+### 4. DATE/TIME FIELD PATTERNS
+```jsx
+// Date Field
+{
+  type: "date",
+  placeholder: "Select date",
+  name: "startDate",
+  label: "Start Date",
+  required: true,
+  view: true,
+  add: true,
+  update: true,
+  minDate: moment().add(-70, "years").toDate(),
+  icon: "date",
+  customClass: "full"
+}
+
+// Time Field
+{
+  type: "time",
+  placeholder: "Select time",
+  name: "startTime",
+  label: "Start Time",
+  required: true,
+  view: true,
+  add: true,
+  update: true,
+  icon: "time",
+  customClass: "half"
+}
+
+// DateTime Field
+{
+  type: "datetime",
+  split: true, // Split into date and time inputs
+  placeholder: "Select date and time",
+  name: "eventDateTime",
+  label: "Event Date & Time",
+  required: true,
+  view: true,
+  add: true,
+  update: true,
+  icon: "date",
+  customClass: "full"
+}
+```
+
+### 5. OTHER FIELD PATTERNS
+```jsx
+// Textarea
+{
+  type: "textarea",
+  placeholder: "Enter description...",
+  name: "description",
+  label: "Description",
+  required: false,
+  view: true,
+  add: true,
+  update: true,
+  rows: 4,
+  footnote: "Help text"
+}
+
+// Number
+{
+  type: "number",
+  placeholder: "Enter number",
+  name: "quantity",
+  label: "Quantity",
+  required: true,
+  view: true,
+  add: true,
+  update: true,
+  min: 0,
+  max: 100,
+  step: 1,
+  footnote: "Help text"
+}
+
+// Image
+{
+  type: "image",
+  placeholder: "Upload image",
+  name: "photo",
+  label: "Profile Picture",
+  required: false,
+  view: true,
+  add: true,
+  update: true,
+  accept: "image/*",
+  maxSize: 5 * 1024 * 1024 // 5MB
+}
+
+// Toggle
+{
+  type: "toggle",
+  placeholder: "Enable feature?",
+  name: "enableFeature",
+  label: "Enable Feature",
+  required: false,
+  view: true,
+  add: true,
+  update: true,
+  default: false,
+  footnote: "Toggle this feature on/off"
+}
+
+// Title/Section
+{
+  type: "title",
+  title: "Section Title",
+  name: "sectionName",
+  add: true,
+  update: true,
+  info: "Section description"
+}
+
+// Divider
+{
+  type: "line",
+  add: true,
+  update: true
+}
+
+// Hidden
+{
+  type: "hidden",
+  name: "fieldName",
+  default: "defaultValue",
+  add: true,
+  update: false
+}
+```
+
+## 🔧 Advanced Patterns
+
+### Conditional Field Pattern
+```jsx
+{
+  type: "text",
+  placeholder: "Enter email",
+  name: "email",
+  condition: {
+    item: "enableSocialMedia",    // Field to check
+    if: true,                     // Value to check for
+    then: "enabled",              // Action if true
+    else: "disabled"              // Action if false
+  },
+  label: "Email",
+  required: false,
+  view: true,
+  add: true,
+  update: true,
+  customClass: "half"
+}
+```
+
+### Status Label Pattern
+```jsx
+{
+  type: "hidden",
+  name: "status",
+  statusLabel: {
+    nextLine: false,
+    size: "small", // "small", "medium", "large"
+    conditions: [
+      {
+        when: "status",
+        condition: "EQUALS",
+        compare: "active",
+        type: "string",
+        label: "Active",
+        icon: "check",
+        color: "green"
+      },
+      {
+        when: "status",
+        condition: "EQUALS",
+        compare: "inactive",
+        type: "string",
+        label: "Inactive",
+        icon: "close",
+        color: "red"
+      }
+    ]
+  }
+}
+```
+
+## 💬 Message & Modal System
+
+### Message Component Usage
+```jsx
+import { Message } from "../../../core/message";
+
+// Notification (type: 1) - Auto-dismiss after 6 seconds
+setMessage({
+  type: 1,
+  content: "Item saved successfully!",
+  icon: "success",
+  title: "Success",
+  onClose: () => {
+    // Optional callback when notification closes
+  }
+});
+
+// Confirmation (type: 2) - Requires user action
+setMessage({
+  type: 2,
+  content: `Do you want to delete '${itemName}'?`,
+  proceed: "Delete",
+  okay: "Cancel",
+  onProceed: async () => {
+    await deleteHandler(item, item._id);
+    return true; // Close modal after successful action
+  },
+  onClose: () => {
+    // Optional callback when user cancels
+  },
+  data: item // Pass data to onProceed callback
+});
+```
+
+### AutoForm Usage Pattern
+```jsx
+import { AutoForm } from "../../../core/autoform/AutoForm";
+
+// Add/Edit Form Pattern
+{isModalOpen && (
+  <AutoForm
+    header={selectedItem ? "Edit Item" : "Add Item"}
+    api="items"
+    formType={selectedItem ? "put" : "post"}
+    formInput={formAttributes}
+    formValues={selectedItem || {}}
+    isOpenHandler={() => {
+      setIsModalOpen(false);
+      setSelectedItem(null);
+    }}
+    setLoaderBox={setLoaderBox}
+    setMessage={setMessage}
+    onClose={() => {
+      setIsModalOpen(false);
+      setSelectedItem(null);
+    }}
+    onCancel={() => {
+      setIsModalOpen(false);
+      setSelectedItem(null);
+    }}
+    submitHandler={(data) => handleFormSubmit(data)}
+  />
+)}
+```
+
+### Delete Confirmation Pattern
+```jsx
+const showDeleteConfirmation = (item) => {
+  const itemName = getValue({ type: "text" }, item.title) || item.name || "Item";
+  
+  setMessage({
+    type: 2,
+    content: `Do you want to delete '${itemName}'? This action cannot be undone.`,
+    proceed: "Delete",
+    okay: "Cancel",
+    onProceed: async () => {
+      try {
+        await deleteHandler(item, item._id);
+        return true; // Close modal
+      } catch (error) {
+        console.error("Delete failed:", error);
+        return false; // Keep modal open
+      }
+    },
+    data: item
+  });
+};
+```
+
+## 🎯 Standard Page Structure Template
+
+```jsx
+import React, { useState, useEffect } from "react";
+import { PageHeader } from "../../../core/input/heading";
+import { RowContainer } from "../../../styles/containers/styles";
+import { ButtonPanel } from "../../../core/list/styles";
+import { Button } from "../../../core/elements";
+import { Search } from "../../../core/search";
+import { Filter } from "../../../core/list/styles";
+import { DataTable } from "../../../core/datatable";
+import { NoDataFound } from "../../../core/list/nodata";
+import { Loader } from "../../../core/loader";
+import { useToast } from "../../../core/toast";
+import { GetIcon } from "../../../icons";
+import { getData, postData } from "../../../backend/api";
+import { AutoForm } from "../../../core/autoform/AutoForm";
+
+const CustomPage = () => {
+  // State management
+  const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const toast = useToast();
+
+  // Data fetching
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getData({}, 'api/items');
+      if (response.status === 200) {
+        setItems(response.data);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch data");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Filtered data
+  const filteredItems = items.filter(item => 
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Handlers
+  const handleAdd = () => {
+    setSelectedItem(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (item) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = async (item) => {
+    try {
+      await postData({ id: item.id }, 'api/items/delete');
+      toast.success("Item deleted successfully");
+      fetchData();
+    } catch (error) {
+      toast.error("Failed to delete item");
+    }
+  };
+
+  return (
+    <RowContainer className="data-layout">
+      {/* Header */}
+      <PageHeader 
+        title="Page Title" 
+        description="Page description"
+        line={false}
+      />
+      
+      {/* Action Panel */}
+      <ButtonPanel className="custom">
+        <div className="flex items-center gap-3">
+          <Search 
+            title="Search"
+            placeholder="Search items..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <Filter onClick={() => {}}>
+            <GetIcon icon="filter" />
+            <span>Filter</span>
+          </Filter>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <Button 
+            onClick={handleAdd}
+            className="bg-primary-base hover:bg-primary-dark text-white"
+          >
+            <GetIcon icon="add" />
+            <span>Add Item</span>
+          </Button>
+        </div>
+      </ButtonPanel>
+
+      {/* Content */}
+      {isLoading ? (
+        <Loader />
+      ) : filteredItems.length === 0 ? (
+        <NoDataFound 
+          shortName="Items"
+          icon="folder"
+          addPrivilege={true}
+          addLabel="Add Item"
+          isCreatingHandler={handleAdd}
+        />
+      ) : (
+        <div className="space-y-4">
+          {/* Your content here */}
+          {filteredItems.map(item => (
+            <div key={item.id} className="p-4 bg-bg-white rounded-lg border border-stroke-soft">
+              <h3 className="font-semibold text-text-main">{item.name}</h3>
+              <p className="text-text-sub">{item.description}</p>
+              <div className="flex gap-2 mt-3">
+                <Button 
+                  onClick={() => handleEdit(item)}
+                  className="bg-bg-weak hover:bg-bg-soft text-text-main"
+                >
+                  Edit
+                </Button>
+                <Button 
+                  onClick={() => handleDelete(item)}
+                  className="bg-state-error hover:bg-red-600 text-white"
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Modal */}
+      {isModalOpen && (
+        <AutoForm
+          header={selectedItem ? "Edit Item" : "Add Item"}
+          api="items"
+          formType={selectedItem ? "put" : "post"}
+          formInput={formAttributes}
+          formValues={selectedItem || {}}
+          isOpenHandler={() => {
+            setIsModalOpen(false);
+            setSelectedItem(null);
+          }}
+          setLoaderBox={setIsLoading}
+          setMessage={setMessage}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedItem(null);
+          }}
+          onCancel={() => {
+            setIsModalOpen(false);
+            setSelectedItem(null);
+          }}
+          submitHandler={(data) => handleFormSubmit(data)}
+        />
+      )}
+    </RowContainer>
+  );
+};
+
+export default CustomPage;
+```
+
+## 📋 Complete Attributes Array Pattern
+
+```jsx
+export const formAttributes = [
+  // Title Section
+  {
+    type: "title",
+    title: "Basic Information",
+    name: "basicInfo",
+    add: true,
+    update: true
+  },
+  
+  // Text Field
+  {
+    type: "text",
+    placeholder: "Enter name",
+    name: "name",
+    label: "Name",
+    required: true,
+    view: true,
+    add: true,
+    update: true,
+    icon: "user"
+  },
+  
+  // Select Field with Add New
+  {
+    type: "select",
+    apiType: "API",
+    selectApi: "api/categories/select",
+    placeholder: "Select category",
+    name: "category",
+    showItem: "value",
+    label: "Category",
+    required: true,
+    view: true,
+    add: true,
+    update: true,
+    filter: true,
+    addNew: {
+      label: "Add new category",
+      attributes: [
+        {
+          type: "text",
+          name: "categoryName",
+          label: "Category Name",
+          required: true,
+          view: true,
+          add: true,
+          update: true
+        }
+      ],
+      api: "api/categories",
+      submitButtonText: "Create"
+    }
+  },
+  
+  // Divider
+  {
+    type: "line",
+    add: true,
+    update: true
+  },
+  
+  // Conditional Fields
+  {
+    type: "toggle",
+    name: "enableAdvanced",
+    label: "Enable Advanced Options",
+    required: false,
+    view: true,
+    add: true,
+    update: true
+  },
+  
+  {
+    type: "text",
+    placeholder: "Advanced setting",
+    name: "advancedSetting",
+    condition: {
+      item: "enableAdvanced",
+      if: true,
+      then: "enabled",
+      else: "disabled"
+    },
+    label: "Advanced Setting",
+    required: false,
+    view: true,
+    add: true,
+    update: true
+  }
+];
+```
+
+## 🚀 Reusable Techniques
+
+### 1. API Integration Pattern
+```jsx
+// For select fields
+apiType: "API",
+selectApi: "api/endpoint/select",
+showItem: "value", // or "label", "name"
+
+// For CSV options
+apiType: "CSV",
+selectApi: "Option1,Option2,Option3"
+
+// For JSON data
+apiType: "JSON",
+selectApi: [
+  { id: "1", value: "Option 1" },
+  { id: "2", value: "Option 2" }
+]
+```
+
+### 2. Validation Pattern
+```jsx
+validation: "required|min:3|max:50|email"
+validation: "required|numeric|min:0|max:100"
+validation: "required|date|after:today"
+```
+
+### 3. Responsive Layout Pattern
+```jsx
+customClass: "full"      // Full width
+customClass: "half"      // Half width
+customClass: "third"     // One-third width
+customClass: "quarter"   // One-quarter width
+```
+
+## 🎯 Quick Reference
+
+### Field Types
+- `text` - Text input
+- `textarea` - Multi-line text
+- `select` - Dropdown with API/CSV/JSON
+- `multiSelect` - Multiple selection
+- `number` - Numeric input
+- `date` - Date picker
+- `time` - Time picker
+- `datetime` - Date and time
+- `image` - File upload
+- `toggle` - Switch
+- `title` - Section header
+- `line` - Divider
+- `hidden` - Hidden field
+
+### Common Properties
+- `name` - Database field name
+- `label` - Display label
+- `placeholder` - Input placeholder
+- `required` - Required field
+- `view/add/update` - Display modes
+- `icon` - Icon name
+- `customClass` - Layout class
+- `footnote` - Help text
+
+### API Types
+- `API` - Fetch from endpoint
+- `CSV` - Comma-separated values
+- `JSON` - Static JSON data
+
+This comprehensive cursor rules file provides all the reusable techniques needed to build any form, component, or page in the EventHex SaaS CMS system. # EventHex SaaS CMS - Complete Cursor Rules
+
+## 🎨 Design System & Color Configuration
+
+### ✅ CORRECT - Use Tailwind Theme Colors
+```jsx
+// Primary Colors
+className="bg-primary-base text-primary-lightest"
+className="bg-primary-light text-primary-dark"
+
+// Background Colors  
+className="bg-bg-white"
+className="bg-bg-weak"
+className="bg-bg-soft"
+
+// Text Colors
+className="text-text-main"
+className="text-text-sub"
+className="text-text-soft"
+className="text-text-disabled"
+
+// Stroke Colors
+className="border border-stroke-soft"
+className="border border-stroke-sub"
+
+// State Colors
+className="bg-state-success text-white"
+className="bg-state-error text-white"
+className="bg-state-warning text-white"
+```
+
+### ❌ WRONG - Don't Use Hardcoded Colors
+```jsx
+// ❌ Never do this
+style={{ backgroundColor: "#375DFB" }}
+className="bg-blue-500"
+className="text-gray-600"
+```
+
+## 🧩 Component Library - Maximum Reusability
+
+### 1. Layout Components - ALWAYS USE THESE
+```jsx
+import { PageHeader, SubPageHeader } from "../../../core/input/heading";
+import { RowContainer } from "../../../styles/containers/styles";
+import { ButtonPanel } from "../../../core/list/styles";
+
+// Usage Pattern
+<RowContainer className="data-layout">
+  <PageHeader title="Page Title" description="Description" />
+  <ButtonPanel className="custom">
+    {/* Action buttons */}
+  </ButtonPanel>
+  {/* Content */}
+</RowContainer>
+```
+
+### 2. Form Components - ALWAYS REUSE
+```jsx
+import { Button } from "../../../core/elements";
+import { Input, Select, Textarea } from "../../../core/input";
+import { Checkbox, Radio } from "../../../core/elements";
+import { CustomLabel, ErrorLabel, Footnote } from "../../../core/input";
+import { AutoForm } from "../../../core/autoform/AutoForm";
+
+// Usage Pattern
+<div className="space-y-4">
+  <div>
+    <CustomLabel label="Field Label" required={true} />
+    <Input 
+      type="text" 
+      placeholder="Enter value"
+      error={errors.fieldName}
+    />
+    <ErrorLabel error={errors.fieldName} />
+  </div>
+</div>
+```
+
+### 3. Interactive Components - ALWAYS REUSE
+```jsx
+import { Search } from "../../../core/search";
+import { Filter } from "../../../core/list/styles";
+import { Toggle } from "../../../core/toggle";
+import { Modal, PopupView } from "../../../core/popupview";
+import { Toast } from "../../../core/toast";
+
+// Usage Pattern
+<div className="flex items-center gap-3">
+  <Search 
+    title="Search" 
+    placeholder="Search items..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+  />
+  <Filter onClick={toggleFilter}>
+    <GetIcon icon="filter" />
+    <span>Filter</span>
+  </Filter>
+</div>
+```
+
+### 4. Feedback Components - ALWAYS REUSE
+```jsx
+import { Loader, Shimmer } from "../../../core/loader";
+import { Message } from "../../../core/message";
+import { NoDataFound } from "../../../core/list/nodata";
+import { useToast } from "../../../core/toast";
+
+// Usage Pattern
+{isLoading ? (
+  <Shimmer count={5} />
+) : items.length === 0 ? (
+  <NoDataFound 
+    shortName="Items" 
+    icon="folder"
+    addPrivilege={true}
+    addLabel="Add Item"
+    isCreatingHandler={handleAdd}
+  />
+) : (
+  // Content
+)}
+```
+
+## 📝 Form Field Patterns - Reusable Techniques
+
+### 1. TEXT FIELD PATTERN
+```jsx
+{
+  type: "text",
+  placeholder: "Enter field name",
+  name: "fieldName",
+  label: "Field Label",
+  required: true,
+  view: true,
+  add: true,
+  update: true,
+  icon: "icon-name",
+  validation: "required|min:3",
+  default: "",
+  tag: false,
+  customClass: "full" // or "half", "third", "quarter"
+}
+```
+
+### 2. SELECT FIELD PATTERN
+```jsx
+{
+  type: "select",
+  apiType: "API",
+  selectApi: "api/endpoint/select",
+  placeholder: "Select option",
+  name: "category",
+  showItem: "value", // or "label", "name"
+  label: "Category",
+  required: true,
+  view: true,
+  add: true,
+  update: true,
+  filter: true,
+  icon: "icon-name",
+  addNew: {
+    label: "Add new category",
+    attributes: [
+      {
+        type: "text",
+        name: "categoryName",
+        label: "Category Name",
+        required: true,
+        view: true,
+        add: true,
+        update: true
+      }
+    ],
+    api: "api/categories",
+    submitButtonText: "Create"
+  }
+}
+```
+
+### 3. MULTI-SELECT FIELD PATTERN
+```jsx
+{
+  type: "multiSelect",
+  apiType: "API",
+  selectApi: "api/items/select",
+  placeholder: "Select items",
+  name: "items",
+  updateOn: "parentField", // Update when parent field changes
+  label: "Items",
+  required: false,
+  view: true,
+  add: true,
+  update: true,
+  icon: "icon-name",
+  addNew: {
+    label: "Add new item",
+    attributes: [
+      {
+        type: "text",
+        name: "itemName",
+        label: "Item Name",
+        required: true
+      }
+    ],
+    api: "api/items",
+    submitButtonText: "Create"
+  }
+}
+```
+
+### 4. DATE/TIME FIELD PATTERNS
+```jsx
+// Date Field
+{
+  type: "date",
+  placeholder: "Select date",
+  name: "startDate",
+  label: "Start Date",
+  required: true,
+  view: true,
+  add: true,
+  update: true,
+  minDate: moment().add(-70, "years").toDate(),
+  icon: "date",
+  customClass: "full"
+}
+
+// Time Field
+{
+  type: "time",
+  placeholder: "Select time",
+  name: "startTime",
+  label: "Start Time",
+  required: true,
+  view: true,
+  add: true,
+  update: true,
+  icon: "time",
+  customClass: "half"
+}
+
+// DateTime Field
+{
+  type: "datetime",
+  split: true, // Split into date and time inputs
+  placeholder: "Select date and time",
+  name: "eventDateTime",
+  label: "Event Date & Time",
+  required: true,
+  view: true,
+  add: true,
+  update: true,
+  icon: "date",
+  customClass: "full"
+}
+```
+
+### 5. OTHER FIELD PATTERNS
+```jsx
+// Textarea
+{
+  type: "textarea",
+  placeholder: "Enter description...",
+  name: "description",
+  label: "Description",
+  required: false,
+  view: true,
+  add: true,
+  update: true,
+  rows: 4,
+  footnote: "Help text"
+}
+
+// Number
+{
+  type: "number",
+  placeholder: "Enter number",
+  name: "quantity",
+  label: "Quantity",
+  required: true,
+  view: true,
+  add: true,
+  update: true,
+  min: 0,
+  max: 100,
+  step: 1,
+  footnote: "Help text"
+}
+
+// Image
+{
+  type: "image",
+  placeholder: "Upload image",
+  name: "photo",
+  label: "Profile Picture",
+  required: false,
+  view: true,
+  add: true,
+  update: true,
+  accept: "image/*",
+  maxSize: 5 * 1024 * 1024 // 5MB
+}
+
+// Toggle
+{
+  type: "toggle",
+  placeholder: "Enable feature?",
+  name: "enableFeature",
+  label: "Enable Feature",
+  required: false,
+  view: true,
+  add: true,
+  update: true,
+  default: false,
+  footnote: "Toggle this feature on/off"
+}
+
+// Title/Section
+{
+  type: "title",
+  title: "Section Title",
+  name: "sectionName",
+  add: true,
+  update: true,
+  info: "Section description"
+}
+
+// Divider
+{
+  type: "line",
+  add: true,
+  update: true
+}
+
+// Hidden
+{
+  type: "hidden",
+  name: "fieldName",
+  default: "defaultValue",
+  add: true,
+  update: false
+}
+```
+
+## 🔧 Advanced Patterns
+
+### Conditional Field Pattern
+```jsx
+{
+  type: "text",
+  placeholder: "Enter email",
+  name: "email",
+  condition: {
+    item: "enableSocialMedia",    // Field to check
+    if: true,                     // Value to check for
+    then: "enabled",              // Action if true
+    else: "disabled"              // Action if false
+  },
+  label: "Email",
+  required: false,
+  view: true,
+  add: true,
+  update: true,
+  customClass: "half"
+}
+```
+
+### Status Label Pattern
+```jsx
+{
+  type: "hidden",
+  name: "status",
+  statusLabel: {
+    nextLine: false,
+    size: "small", // "small", "medium", "large"
+    conditions: [
+      {
+        when: "status",
+        condition: "EQUALS",
+        compare: "active",
+        type: "string",
+        label: "Active",
+        icon: "check",
+        color: "green"
+      },
+      {
+        when: "status",
+        condition: "EQUALS",
+        compare: "inactive",
+        type: "string",
+        label: "Inactive",
+        icon: "close",
+        color: "red"
+      }
+    ]
+  }
+}
+```
+
+## 💬 Message & Modal System
+
+### Message Component Usage
+```jsx
+import { Message } from "../../../core/message";
+
+// Notification (type: 1) - Auto-dismiss after 6 seconds
+setMessage({
+  type: 1,
+  content: "Item saved successfully!",
+  icon: "success",
+  title: "Success",
+  onClose: () => {
+    // Optional callback when notification closes
+  }
+});
+
+// Confirmation (type: 2) - Requires user action
+setMessage({
+  type: 2,
+  content: `Do you want to delete '${itemName}'?`,
+  proceed: "Delete",
+  okay: "Cancel",
+  onProceed: async () => {
+    await deleteHandler(item, item._id);
+    return true; // Close modal after successful action
+  },
+  onClose: () => {
+    // Optional callback when user cancels
+  },
+  data: item // Pass data to onProceed callback
+});
+```
+
+### AutoForm Usage Pattern
+```jsx
+import { AutoForm } from "../../../core/autoform/AutoForm";
+
+// Add/Edit Form Pattern
+{isModalOpen && (
+  <AutoForm
+    header={selectedItem ? "Edit Item" : "Add Item"}
+    api="items"
+    formType={selectedItem ? "put" : "post"}
+    formInput={formAttributes}
+    formValues={selectedItem || {}}
+    isOpenHandler={() => {
+      setIsModalOpen(false);
+      setSelectedItem(null);
+    }}
+    setLoaderBox={setLoaderBox}
+    setMessage={setMessage}
+    onClose={() => {
+      setIsModalOpen(false);
+      setSelectedItem(null);
+    }}
+    onCancel={() => {
+      setIsModalOpen(false);
+      setSelectedItem(null);
+    }}
+    submitHandler={(data) => handleFormSubmit(data)}
+  />
+)}
+```
+
+### Delete Confirmation Pattern
+```jsx
+const showDeleteConfirmation = (item) => {
+  const itemName = getValue({ type: "text" }, item.title) || item.name || "Item";
+  
+  setMessage({
+    type: 2,
+    content: `Do you want to delete '${itemName}'? This action cannot be undone.`,
+    proceed: "Delete",
+    okay: "Cancel",
+    onProceed: async () => {
+      try {
+        await deleteHandler(item, item._id);
+        return true; // Close modal
+      } catch (error) {
+        console.error("Delete failed:", error);
+        return false; // Keep modal open
+      }
+    },
+    data: item
+  });
+};
+```
+
+## 🎯 Standard Page Structure Template
+
+```jsx
+import React, { useState, useEffect } from "react";
+import { PageHeader } from "../../../core/input/heading";
+import { RowContainer } from "../../../styles/containers/styles";
+import { ButtonPanel } from "../../../core/list/styles";
+import { Button } from "../../../core/elements";
+import { Search } from "../../../core/search";
+import { Filter } from "../../../core/list/styles";
+import { DataTable } from "../../../core/datatable";
+import { NoDataFound } from "../../../core/list/nodata";
+import { Loader } from "../../../core/loader";
+import { useToast } from "../../../core/toast";
+import { GetIcon } from "../../../icons";
+import { getData, postData } from "../../../backend/api";
+import { AutoForm } from "../../../core/autoform/AutoForm";
+
+const CustomPage = () => {
+  // State management
+  const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const toast = useToast();
+
+  // Data fetching
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getData({}, 'api/items');
+      if (response.status === 200) {
+        setItems(response.data);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch data");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Filtered data
+  const filteredItems = items.filter(item => 
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Handlers
+  const handleAdd = () => {
+    setSelectedItem(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (item) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = async (item) => {
+    try {
+      await postData({ id: item.id }, 'api/items/delete');
+      toast.success("Item deleted successfully");
+      fetchData();
+    } catch (error) {
+      toast.error("Failed to delete item");
+    }
+  };
+
+  return (
+    <RowContainer className="data-layout">
+      {/* Header */}
+      <PageHeader 
+        title="Page Title" 
+        description="Page description"
+        line={false}
+      />
+      
+      {/* Action Panel */}
+      <ButtonPanel className="custom">
+        <div className="flex items-center gap-3">
+          <Search 
+            title="Search"
+            placeholder="Search items..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <Filter onClick={() => {}}>
+            <GetIcon icon="filter" />
+            <span>Filter</span>
+          </Filter>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <Button 
+            onClick={handleAdd}
+            className="bg-primary-base hover:bg-primary-dark text-white"
+          >
+            <GetIcon icon="add" />
+            <span>Add Item</span>
+          </Button>
+        </div>
+      </ButtonPanel>
+
+      {/* Content */}
+      {isLoading ? (
+        <Loader />
+      ) : filteredItems.length === 0 ? (
+        <NoDataFound 
+          shortName="Items"
+          icon="folder"
+          addPrivilege={true}
+          addLabel="Add Item"
+          isCreatingHandler={handleAdd}
+        />
+      ) : (
+        <div className="space-y-4">
+          {/* Your content here */}
+          {filteredItems.map(item => (
+            <div key={item.id} className="p-4 bg-bg-white rounded-lg border border-stroke-soft">
+              <h3 className="font-semibold text-text-main">{item.name}</h3>
+              <p className="text-text-sub">{item.description}</p>
+              <div className="flex gap-2 mt-3">
+                <Button 
+                  onClick={() => handleEdit(item)}
+                  className="bg-bg-weak hover:bg-bg-soft text-text-main"
+                >
+                  Edit
+                </Button>
+                <Button 
+                  onClick={() => handleDelete(item)}
+                  className="bg-state-error hover:bg-red-600 text-white"
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Modal */}
+      {isModalOpen && (
+        <AutoForm
+          header={selectedItem ? "Edit Item" : "Add Item"}
+          api="items"
+          formType={selectedItem ? "put" : "post"}
+          formInput={formAttributes}
+          formValues={selectedItem || {}}
+          isOpenHandler={() => {
+            setIsModalOpen(false);
+            setSelectedItem(null);
+          }}
+          setLoaderBox={setIsLoading}
+          setMessage={setMessage}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedItem(null);
+          }}
+          onCancel={() => {
+            setIsModalOpen(false);
+            setSelectedItem(null);
+          }}
+          submitHandler={(data) => handleFormSubmit(data)}
+        />
+      )}
+    </RowContainer>
+  );
+};
+
+export default CustomPage;
+```
+
+## 📋 Complete Attributes Array Pattern
+
+```jsx
+export const formAttributes = [
+  // Title Section
+  {
+    type: "title",
+    title: "Basic Information",
+    name: "basicInfo",
+    add: true,
+    update: true
+  },
+  
+  // Text Field
+  {
+    type: "text",
+    placeholder: "Enter name",
+    name: "name",
+    label: "Name",
+    required: true,
+    view: true,
+    add: true,
+    update: true,
+    icon: "user"
+  },
+  
+  // Select Field with Add New
+  {
+    type: "select",
+    apiType: "API",
+    selectApi: "api/categories/select",
+    placeholder: "Select category",
+    name: "category",
+    showItem: "value",
+    label: "Category",
+    required: true,
+    view: true,
+    add: true,
+    update: true,
+    filter: true,
+    addNew: {
+      label: "Add new category",
+      attributes: [
+        {
+          type: "text",
+          name: "categoryName",
+          label: "Category Name",
+          required: true,
+          view: true,
+          add: true,
+          update: true
+        }
+      ],
+      api: "api/categories",
+      submitButtonText: "Create"
+    }
+  },
+  
+  // Divider
+  {
+    type: "line",
+    add: true,
+    update: true
+  },
+  
+  // Conditional Fields
+  {
+    type: "toggle",
+    name: "enableAdvanced",
+    label: "Enable Advanced Options",
+    required: false,
+    view: true,
+    add: true,
+    update: true
+  },
+  
+  {
+    type: "text",
+    placeholder: "Advanced setting",
+    name: "advancedSetting",
+    condition: {
+      item: "enableAdvanced",
+      if: true,
+      then: "enabled",
+      else: "disabled"
+    },
+    label: "Advanced Setting",
+    required: false,
+    view: true,
+    add: true,
+    update: true
+  }
+];
+```
+
+## 🚀 Reusable Techniques
+
+### 1. API Integration Pattern
+```jsx
+// For select fields
+apiType: "API",
+selectApi: "api/endpoint/select",
+showItem: "value", // or "label", "name"
+
+// For CSV options
+apiType: "CSV",
+selectApi: "Option1,Option2,Option3"
+
+// For JSON data
+apiType: "JSON",
+selectApi: [
+  { id: "1", value: "Option 1" },
+  { id: "2", value: "Option 2" }
+]
+```
+
+### 2. Validation Pattern
+```jsx
+validation: "required|min:3|max:50|email"
+validation: "required|numeric|min:0|max:100"
+validation: "required|date|after:today"
+```
+
+### 3. Responsive Layout Pattern
+```jsx
+customClass: "full"      // Full width
+customClass: "half"      // Half width
+customClass: "third"     // One-third width
+customClass: "quarter"   // One-quarter width
+```
+
+## 🎯 Quick Reference
+
+### Field Types
+- `text` - Text input
+- `textarea` - Multi-line text
+- `select` - Dropdown with API/CSV/JSON
+- `multiSelect` - Multiple selection
+- `number` - Numeric input
+- `date` - Date picker
+- `time` - Time picker
+- `datetime` - Date and time
+- `image` - File upload
+- `toggle` - Switch
+- `title` - Section header
+- `line` - Divider
+- `hidden` - Hidden field
+
+### Common Properties
+- `name` - Database field name
+- `label` - Display label
+- `placeholder` - Input placeholder
+- `required` - Required field
+- `view/add/update` - Display modes
+- `icon` - Icon name
+- `customClass` - Layout class
+- `footnote` - Help text
+
+### API Types
+- `API` - Fetch from endpoint
+- `CSV` - Comma-separated values
+- `JSON` - Static JSON data
+
+
+### For Custom Component
+
+- https://pro.alignui.com/templates
+- - alwyas use model of alignui, dont inherit reacreate with Tailwind CSS
+
+This comprehensive cursor rules file provides all the reusable techniques needed to build any form, component, or page in the EventHex SaaS CMS system. 
