@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
   return {
     // Production: App is hosted at /exhibitor subpath (e.g., testing.eventhex.ai/exhibitor)
     // Development: Keep root for local dev server
-    base: '/exhibitor',
+    base: '/exhibitor/',
     plugins: [react()],
     server: {
       port: env.PORT ? Number(env.PORT) : 3000,
